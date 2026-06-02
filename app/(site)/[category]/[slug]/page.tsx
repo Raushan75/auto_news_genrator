@@ -11,7 +11,7 @@ import {
   generateBreadcrumbJsonLd,
 } from "@/lib/seo";
 
-import { formatDate, getCategoryConfig } from "@/lib/utils";
+import { cn, formatDate, getCategoryConfig } from "@/lib/utils";
 
 import { ArticleCard } from "@/components/news/ArticleCard";
 import { AdSlot } from "@/components/news/AdSlot";
@@ -170,7 +170,100 @@ export default async function ArticlePage({ params }: Props) {
         }}
       />
 
-      {/* Your existing JSX remains unchanged */}
+      <main className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_340px]">
+          <article className="space-y-10">
+            <div className="space-y-6">
+              <div className="flex flex-wrap items-center gap-3">
+                <span
+                  className={cn(
+                    "inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em]",
+                    cat.color,
+                  )}
+                >
+                  {cat.emoji} {cat.label}
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  {article.author || article.sourceName || "NexusAI"}
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  {formatDate(article.publishedAt)}
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  {article.readTime} min read
+                </span>
+              </div>
+
+              <h1 className="font-playfair text-3xl md:text-5xl font-bold tracking-tight text-foreground">
+                {article.title}
+              </h1>
+
+              <p className="max-w-3xl text-lg text-muted-foreground">
+                {article.excerpt}
+              </p>
+            </div>
+
+            {article.imageUrl ? (
+              <div className="relative h-[420px] overflow-hidden rounded-3xl bg-muted">
+                <Image
+                  src={article.imageUrl}
+                  alt={article.imageAlt || article.title}
+                  fill
+                  unoptimized
+                  className="object-cover"
+                />
+              </div>
+            ) : (
+              <div className="rounded-3xl bg-muted p-16 text-center text-5xl text-muted-foreground">
+                {cat.emoji}
+              </div>
+            )}
+
+            <div className="prose prose-invert max-w-none text-foreground">
+              <div dangerouslySetInnerHTML={{ __html: article.content }} />
+            </div>
+
+            {article.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {article.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full border border-border bg-background px-3 py-1 text-xs font-medium text-muted-foreground"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+          </article>
+
+          <aside className="space-y-8">
+            <div className="rounded-3xl border border-border bg-card p-6">
+              <h2 className="text-lg font-semibold text-foreground mb-4">
+                Related articles
+              </h2>
+              <div className="space-y-4">
+                {related.length > 0 ? (
+                  related.map((item) => (
+                    <ArticleCard key={item.id} article={item} compact />
+                  ))
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    No related articles found.
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <NewsletterSection />
+            <AdSlot
+              slot="article-sidebar"
+              size="rectangle"
+              className="hidden xl:block"
+            />
+          </aside>
+        </div>
+      </main>
     </>
   );
 }

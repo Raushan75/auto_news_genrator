@@ -7,42 +7,116 @@ const prisma = new PrismaClient();
 
 const RSS_FEEDS = [
   // World
-  { name: "BBC News", url: "http://feeds.bbci.co.uk/news/rss.xml", category: "WORLD" },
-  { name: "Reuters Top News", url: "https://feeds.reuters.com/reuters/topNews", category: "WORLD" },
-  { name: "AP News", url: "https://rsshub.app/apnews/topics/apf-topnews", category: "WORLD" },
+  {
+    name: "BBC News",
+    url: "http://feeds.bbci.co.uk/news/rss.xml",
+    category: "WORLD",
+  },
+  {
+    name: "Reuters Top News",
+    url: "https://feeds.reuters.com/reuters/topNews",
+    category: "WORLD",
+  },
+  {
+    name: "AP News",
+    url: "https://rsshub.app/apnews/topics/apf-topnews",
+    category: "WORLD",
+  },
 
   // Technology
-  { name: "TechCrunch", url: "https://techcrunch.com/feed/", category: "TECHNOLOGY" },
-  { name: "The Verge", url: "https://www.theverge.com/rss/index.xml", category: "TECHNOLOGY" },
-  { name: "Ars Technica", url: "http://feeds.arstechnica.com/arstechnica/index", category: "TECHNOLOGY" },
-  { name: "Wired", url: "https://www.wired.com/feed/rss", category: "TECHNOLOGY" },
+  {
+    name: "TechCrunch",
+    url: "https://techcrunch.com/feed/",
+    category: "TECHNOLOGY",
+  },
+  {
+    name: "The Verge",
+    url: "https://www.theverge.com/rss/index.xml",
+    category: "TECHNOLOGY",
+  },
+  {
+    name: "Ars Technica",
+    url: "http://feeds.arstechnica.com/arstechnica/index",
+    category: "TECHNOLOGY",
+  },
+  {
+    name: "Wired",
+    url: "https://www.wired.com/feed/rss",
+    category: "TECHNOLOGY",
+  },
 
   // Finance
-  { name: "Bloomberg Markets", url: "https://feeds.bloomberg.com/markets/news.rss", category: "FINANCE" },
-  { name: "Financial Times", url: "https://www.ft.com/rss/home/us", category: "FINANCE" },
-  { name: "CNBC", url: "https://www.cnbc.com/id/100003114/device/rss/rss.html", category: "FINANCE" },
+  {
+    name: "Bloomberg Markets",
+    url: "https://feeds.bloomberg.com/markets/news.rss",
+    category: "FINANCE",
+  },
+  {
+    name: "Financial Times",
+    url: "https://www.ft.com/rss/home/us",
+    category: "FINANCE",
+  },
+  {
+    name: "CNBC",
+    url: "https://www.cnbc.com/id/100003114/device/rss/rss.html",
+    category: "FINANCE",
+  },
 
   // Science
-  { name: "Nature", url: "https://www.nature.com/nature.rss", category: "SCIENCE" },
-  { name: "Science Daily", url: "https://www.sciencedaily.com/rss/all.xml", category: "SCIENCE" },
+  {
+    name: "Nature",
+    url: "https://www.nature.com/nature.rss",
+    category: "SCIENCE",
+  },
+  {
+    name: "Science Daily",
+    url: "https://www.sciencedaily.com/rss/all.xml",
+    category: "SCIENCE",
+  },
 
   // Health
-  { name: "Stat News", url: "https://www.statnews.com/feed/", category: "HEALTH" },
-  { name: "MedPage Today", url: "https://www.medpagetoday.com/rss/headlines.xml", category: "HEALTH" },
+  {
+    name: "Stat News",
+    url: "https://www.statnews.com/feed/",
+    category: "HEALTH",
+  },
+  {
+    name: "MedPage Today",
+    url: "https://www.medpagetoday.com/rss/headlines.xml",
+    category: "HEALTH",
+  },
 
   // Climate
-  { name: "Climate Home News", url: "https://www.climatechangenews.com/feed/", category: "CLIMATE" },
-  { name: "Carbon Brief", url: "https://www.carbonbrief.org/feed", category: "CLIMATE" },
+  {
+    name: "Climate Home News",
+    url: "https://www.climatechangenews.com/feed/",
+    category: "CLIMATE",
+  },
+  {
+    name: "Carbon Brief",
+    url: "https://www.carbonbrief.org/feed",
+    category: "CLIMATE",
+  },
 
   // Politics
-  { name: "Politico", url: "https://www.politico.com/rss/politics08.xml", category: "POLITICS" },
-  { name: "The Hill", url: "https://thehill.com/rss/syndicator/19110", category: "POLITICS" },
+  {
+    name: "Politico",
+    url: "https://www.politico.com/rss/politics08.xml",
+    category: "POLITICS",
+  },
+  {
+    name: "The Hill",
+    url: "https://thehill.com/rss/syndicator/19110",
+    category: "POLITICS",
+  },
 ];
 
 const SAMPLE_ARTICLES = [
   {
-    title: "AI Governance Summit Reaches Historic Agreement on Safety Standards",
-    excerpt: "World leaders and tech executives convene in Geneva to sign landmark AI safety framework covering model transparency, compute thresholds, and emergency shutdown protocols.",
+    title:
+      "AI Governance Summit Reaches Historic Agreement on Safety Standards",
+    excerpt:
+      "World leaders and tech executives convene in Geneva to sign landmark AI safety framework covering model transparency, compute thresholds, and emergency shutdown protocols.",
     content: `<p>In a historic gathering at the Palais des Nations in Geneva, representatives from 47 nations and leading AI laboratories signed the Geneva Framework on Artificial Intelligence Safety — the most comprehensive international AI governance agreement to date.</p>
 <p>The framework, years in the making, establishes binding transparency requirements for frontier AI models, mandatory safety evaluations before deployment, and an international AI Incident Response Protocol modeled after nuclear safeguards.</p>
 <h2>Key Provisions</h2>
@@ -62,7 +136,8 @@ const SAMPLE_ARTICLES = [
   },
   {
     title: "Federal Reserve Signals Rate Cut as Inflation Cools to 2.1%",
-    excerpt: "Fed minutes reveal growing consensus among policymakers for a September rate reduction as core PCE falls below the central bank's target for the first time since 2021.",
+    excerpt:
+      "Fed minutes reveal growing consensus among policymakers for a September rate reduction as core PCE falls below the central bank's target for the first time since 2021.",
     content: `<p>Federal Reserve officials are increasingly aligned on cutting interest rates at their September meeting after the latest Personal Consumption Expenditures price index showed inflation falling to 2.1% — just above the central bank's 2% target and the lowest reading since early 2021.</p>
 <p>Minutes from the July Federal Open Market Committee meeting, released Wednesday, show that "a substantial majority" of participants believe easing conditions are approaching, with several officials noting that waiting too long risks unnecessary economic damage.</p>
 <h2>Market Reaction</h2>
@@ -78,8 +153,10 @@ const SAMPLE_ARTICLES = [
     status: "PUBLISHED",
   },
   {
-    title: "CRISPR Gene Therapy Achieves First Complete Cure for Hereditary Blindness",
-    excerpt: "Clinical trial results show 94% success rate in restoring functional vision in patients with Leber congenital amaurosis, marking a watershed moment for genetic medicine.",
+    title:
+      "CRISPR Gene Therapy Achieves First Complete Cure for Hereditary Blindness",
+    excerpt:
+      "Clinical trial results show 94% success rate in restoring functional vision in patients with Leber congenital amaurosis, marking a watershed moment for genetic medicine.",
     content: `<p>Researchers at the Massachusetts Eye and Ear Institute have published landmark clinical trial results demonstrating that a single CRISPR-based gene editing treatment can permanently restore vision in patients with Leber congenital amaurosis type 10, a form of hereditary blindness caused by mutations in the CEP290 gene.</p>
 <p>The Phase III trial, enrolling 127 patients across 14 countries, showed 94% of participants gained functional vision within six months of a single subretinal injection. Follow-up data at 24 months indicates the improvements are durable, with no significant decline observed.</p>
 <h2>How It Works</h2>
@@ -96,7 +173,8 @@ const SAMPLE_ARTICLES = [
   },
   {
     title: "OpenAI Releases GPT-5 With Native Multimodal Reasoning",
-    excerpt: "The latest flagship model demonstrates unprecedented performance across scientific reasoning, code generation, and creative tasks while introducing real-time voice and vision capabilities.",
+    excerpt:
+      "The latest flagship model demonstrates unprecedented performance across scientific reasoning, code generation, and creative tasks while introducing real-time voice and vision capabilities.",
     content: `<p>OpenAI has unveiled GPT-5, its most capable artificial intelligence model to date, featuring native multimodal processing, real-time voice interaction, and performance improvements that the company claims represent the largest capability leap between consecutive model generations.</p>
 <p>In benchmark evaluations, GPT-5 achieves top scores on graduate-level scientific reasoning tests, outperforming specialist systems in areas including mathematics, medicine, law, and software engineering. The model is also the first to pass the full Turing Test across a standardized suite of human evaluator assessments.</p>
 <h2>Key Capabilities</h2>
@@ -113,7 +191,8 @@ const SAMPLE_ARTICLES = [
   },
   {
     title: "Solar Power Achieves Grid Parity in 147 Countries, IEA Reports",
-    excerpt: "A historic milestone in the global energy transition: solar is now the cheapest source of electricity generation in the majority of the world, the International Energy Agency says.",
+    excerpt:
+      "A historic milestone in the global energy transition: solar is now the cheapest source of electricity generation in the majority of the world, the International Energy Agency says.",
     content: `<p>Solar photovoltaic power has achieved grid parity — meaning it is now the cheapest available source of new electricity generation — in 147 countries, representing over 90% of global electricity demand, according to the International Energy Agency's annual World Energy Outlook report.</p>
 <p>The milestone, which analysts projected would take until 2030, has arrived nearly five years early, driven by an 89% collapse in solar module prices since 2010, rapidly improving battery storage economics, and aggressive manufacturing scale-up in Asia.</p>
 <h2>Investment Surge</h2>
@@ -130,7 +209,8 @@ const SAMPLE_ARTICLES = [
   },
   {
     title: "WHO Approves Revolutionary mRNA Cancer Vaccine Platform",
-    excerpt: "Personalized immunotherapy technology developed by BioNTech and Moderna receives regulatory green light following trials showing 67% reduction in tumor recurrence across multiple cancer types.",
+    excerpt:
+      "Personalized immunotherapy technology developed by BioNTech and Moderna receives regulatory green light following trials showing 67% reduction in tumor recurrence across multiple cancer types.",
     content: `<p>The World Health Organization has granted prequalification to a new class of personalized mRNA cancer vaccines, clearing the path for global deployment of a technology that has shown remarkable efficacy in reducing cancer recurrence across breast, lung, colorectal, and melanoma indications.</p>
 <p>The vaccines work by sequencing a patient's tumor DNA, identifying unique mutations called neoantigens, and manufacturing a custom mRNA sequence that trains the immune system to recognize and destroy cancer cells bearing those specific markers. The entire manufacturing process, from biopsy to injection-ready vaccine, now takes approximately three weeks.</p>
 <h2>Trial Results</h2>
@@ -147,7 +227,8 @@ const SAMPLE_ARTICLES = [
   },
   {
     title: "Bitcoin Surpasses $125,000 as Institutional Adoption Accelerates",
-    excerpt: "The world's largest cryptocurrency reaches a new all-time high amid record ETF inflows, corporate treasury adoption, and growing sovereign wealth fund interest.",
+    excerpt:
+      "The world's largest cryptocurrency reaches a new all-time high amid record ETF inflows, corporate treasury adoption, and growing sovereign wealth fund interest.",
     content: `<p>Bitcoin surged past $125,000 for the first time, driven by a confluence of institutional demand that analysts say marks a qualitative shift in how traditional finance views the asset. The milestone came after a week of record inflows into U.S. spot Bitcoin ETFs, which collectively now hold over $180 billion in assets under management.</p>
 <p>BlackRock's iShares Bitcoin Trust alone attracted $4.2 billion in a single trading session — the largest single-day ETF inflow in history across any asset class. The fund has become one of the fastest-growing ETFs ever launched, accumulating assets at a rate that surpassed gold ETF adoption in its first comparable period.</p>
 <h2>Sovereign Adoption</h2>
@@ -163,7 +244,8 @@ const SAMPLE_ARTICLES = [
   },
   {
     title: "Quantum Computing Firm Achieves 1,000-Qubit Stable Processor",
-    excerpt: "The breakthrough brings fault-tolerant quantum computing significantly closer to practical applications in drug discovery, materials science, and cryptography.",
+    excerpt:
+      "The breakthrough brings fault-tolerant quantum computing significantly closer to practical applications in drug discovery, materials science, and cryptography.",
     content: `<p>QuEra Computing has demonstrated a 1,000-qubit neutral atom quantum processor with error rates below the threshold required for fault-tolerant computation, a milestone that researchers say fundamentally changes the timeline for practical quantum advantage in commercial applications.</p>
 <p>Unlike superconducting qubits that must operate near absolute zero and are sensitive to electromagnetic interference, neutral atom systems offer natural isolation from environmental noise. QuEra's approach uses optical tweezers — highly focused laser beams — to trap and manipulate individual rubidium atoms with exceptional precision.</p>
 <h2>Practical Implications</h2>
@@ -255,6 +337,12 @@ async function main() {
           isFeatured: article.isFeatured,
           isBreaking: article.isBreaking,
           readTime: article.readTime,
+          imageUrl:
+            (article as any).imageUrl ??
+            "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=1200&q=80",
+          imageAlt:
+            ((article as any).imageAlt ?? article.excerpt.slice(0, 120)) ||
+            article.title,
           publishedAt: new Date(Date.now() - Math.random() * 86400000 * 3),
           viewCount: Math.floor(Math.random() * 50000),
         },
@@ -278,27 +366,17 @@ async function main() {
   });
   console.log("✅ Test subscriber seeded");
 
-  // Settings
-  const defaultSettings = [
-    { key: "site_name", value: "NexusAI News" },
-    { key: "articles_per_page", value: "12" },
-    { key: "auto_rewrite", value: "true" },
-    { key: "breaking_news_count", value: "5" },
-    { key: "newsletter_enabled", value: "true" },
-  ];
-  for (const s of defaultSettings) {
-    await prisma.setting.upsert({
-      where: { key: s.key },
-      update: {},
-      create: { key: s.key, value: s.value },
-    });
-  }
-  console.log("✅ Default settings seeded");
+  // Settings: skipped because the project does not define a `Setting` model.
+  // If you add a `Setting` model to prisma/schema.prisma, re-enable seeding here.
+  console.log("ℹ️ Default settings seeding skipped (no Setting model)");
 
   console.log("\n🎉 Seeding complete!");
   console.log("   Admin login: admin@nexusai.news / Admin@NexusAI2026!");
 }
 
 main()
-  .catch((e) => { console.error(e); process.exit(1); })
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
   .finally(() => prisma.$disconnect());

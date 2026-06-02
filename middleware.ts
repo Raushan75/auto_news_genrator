@@ -1,5 +1,5 @@
 // middleware.ts
-import { auth } from "@/lib/auth";
+import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
@@ -12,23 +12,25 @@ const ADMIN_ROUTES = ["/dashboard"];
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Check if route needs protection
   const isProtected = PROTECTED_ROUTES.some((r) => pathname.startsWith(r));
   const isAdmin = ADMIN_ROUTES.some((r) => pathname.startsWith(r));
 
   if (!isProtected) return NextResponse.next();
 
-  const session = await auth();
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
 
-  // Not authenticated
-  if (!session) {
+  if (!token) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
-  // Not admin
-  if (isAdmin && session.user.role !== "ADMIN" && session.user.role !== "EDITOR") {
+  const userRole = token.role as string | undefined;
+
+  if (isAdmin && userRole !== "ADMIN" && userRole !== "EDITOR") {
     return NextResponse.redirect(new URL("/", request.url));
   }
 

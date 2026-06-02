@@ -1,5 +1,11 @@
 // types/index.ts
-import type { Article, Category, ArticleStatus, User, Role } from "@prisma/client";
+import type {
+  Article,
+  Category,
+  ArticleStatus,
+  User,
+  Role,
+} from "@prisma/client";
 
 // ─── Article ──────────────────────────────────────────────────────────────────
 
@@ -62,7 +68,10 @@ export interface ApiResponse<T = void> {
 
 // ─── Auth ─────────────────────────────────────────────────────────────────────
 
-export type SessionUser = Pick<User, "id" | "name" | "email" | "image" | "role">;
+export type SessionUser = Pick<
+  User,
+  "id" | "name" | "email" | "image" | "role"
+>;
 
 export interface AuthSession {
   user: SessionUser;
@@ -76,10 +85,12 @@ export interface RawRssItem {
   link?: string;
   contentSnippet?: string;
   content?: string;
+  contentEncoded?: string;
   creator?: string;
   pubDate?: string;
   enclosure?: { url?: string };
   "media:content"?: { $?: { url?: string } };
+  "media:thumbnail"?: { $?: { url?: string } };
 }
 
 export interface IngestResult {

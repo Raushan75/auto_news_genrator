@@ -11,6 +11,7 @@ const parser = new Parser({
     item: [
       ["media:content", "media:content"],
       ["media:thumbnail", "media:thumbnail"],
+      ["content:encoded", "contentEncoded"],
       ["dc:creator", "creator"],
     ],
   },
@@ -20,8 +21,10 @@ const parser = new Parser({
 function extractImageUrl(item: RawRssItem): string | null {
   if (item.enclosure?.url) return item.enclosure.url;
   if (item["media:content"]?.["$"]?.url) return item["media:content"]["$"].url;
-  // Try extracting img from content
-  const imgMatch = item.content?.match(/<img[^>]+src="([^">]+)"/);
+  if (item["media:thumbnail"]?.["$"]?.url)
+    return item["media:thumbnail"]["$"]?.url;
+  const content = item.content || (item as any).contentEncoded || "";
+  const imgMatch = content.match(/<img[^>]+src="([^"><]+)"/);
   if (imgMatch) return imgMatch[1];
   return null;
 }
@@ -68,20 +71,31 @@ export async function ingestFeed(feedId: string): Promise<IngestResult> {
   for (const item of parsedFeed.items.slice(0, 20)) {
     try {
       const sourceUrl = item.link;
-      if (!sourceUrl) { result.skipped++; continue; }
+      if (!sourceUrl) {
+        result.skipped++;
+        continue;
+      }
 
       // Skip duplicates
       const exists = await prisma.article.findFirst({
         where: { sourceUrl },
         select: { id: true },
       });
-      if (exists) { result.skipped++; continue; }
+      if (exists) {
+        result.skipped++;
+        continue;
+      }
 
       const title = item.title?.trim();
-      if (!title || title.length < 10) { result.skipped++; continue; }
+      if (!title || title.length < 10) {
+        result.skipped++;
+        continue;
+      }
 
       const rawContent = item.content || item.contentSnippet || "";
-      const excerpt = (item.contentSnippet || rawContent.replace(/<[^>]+>/g, ""))
+      const excerpt = (
+        item.contentSnippet || rawContent.replace(/<[^>]+>/g, "")
+      )
         .slice(0, 300)
         .trim();
 
@@ -147,7 +161,7 @@ export async function ingestFeed(feedId: string): Promise<IngestResult> {
   });
 
   console.log(
-    `[RSS] ${feed.name}: fetched=${result.fetched} created=${result.created} skipped=${result.skipped} errors=${result.errors.length}`
+    `[RSS] ${feed.name}: fetched=${result.fetched} created=${result.created} skipped=${result.skipped} errors=${result.errors.length}`,
   );
 
   return result;
@@ -165,7 +179,7 @@ export async function ingestAllFeeds(): Promise<IngestResult[]> {
   for (let i = 0; i < feeds.length; i += 3) {
     const batch = feeds.slice(i, i + 3);
     const batchResults = await Promise.allSettled(
-      batch.map((f) => ingestFeed(f.id))
+      batch.map((f) => ingestFeed(f.id)),
     );
     for (const r of batchResults) {
       if (r.status === "fulfilled") results.push(r.value);
